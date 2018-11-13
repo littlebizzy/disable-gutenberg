@@ -1,4 +1,4 @@
-=== Disable Gutenberg LittleBizzy ===
+=== Disable Gutenberg ===
 
 Contributors: littlebizzy
 Donate link: https://www.patreon.com/littlebizzy
