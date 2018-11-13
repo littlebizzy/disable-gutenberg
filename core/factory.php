@@ -5,6 +5,7 @@ namespace LittleBizzy\DisableGutenberg\Core;
 
 // Aliased namespaces
 use \LittleBizzy\DisableGutenberg\Helpers;
+use \LittleBizzy\DisableGutenberg\Gutenberg;
 
 /**
  * Object Factory class
@@ -17,28 +18,19 @@ class Factory extends Helpers\Factory {
 
 
 	/**
-	 * A core object
+	 * A Gutenberg detector instance
 	 */
-	protected function createCoreObject() {
-		return new MyCoreObject;
+	protected function createDetector() {
+		return Gutenberg\Detector::instance($this->plugin);
 	}
 
 
 
 	/**
-	 * A singleton object instance
+	 * Create Disabler object
 	 */
-	protected function createOtherObject() {
-		return Subdirectory\TheClassName::instance($this->plugin);
-	}
-
-
-
-	/**
-	 * Create new object
-	 */
-	protected function createNewObject($args) {
-		return new Subdirectory\TheClassName($args);
+	protected function createDisabler() {
+		return Gutenberg\Disabler::instance($this->plugin);
 	}
 
 

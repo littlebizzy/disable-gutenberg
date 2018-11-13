@@ -24,8 +24,26 @@ final class Core extends Helpers\Singleton {
 		// Factory object
 		$this->plugin->factory = new Factory($this->plugin);
 
-		// Attempt to run an object
-		//$this->plugin->factory->myObject()
+		// Remove the "Try Gutenberg" dashboard widget
+		remove_action('try_gutenberg_panel', 'wp_try_gutenberg_panel');
+
+		// Plugin loaded hook
+		add_action('plugins_loaded', [$this, 'onPluginsLoaded']);
+	}
+
+
+
+	/**
+	 * All plugins loaded hook
+	 */
+	public function onPluginsLoaded() {
+
+		// Check Gutenberg as a plugin or default editor
+		if ($this->plugin->factory->detector->detected()) {
+
+			// Disable actions and hooks
+			$this->plugin->factory->disabler();
+		}
 	}
 
 
