@@ -35,7 +35,8 @@ class Detector extends Helpers\Singleton {
 		}
 
 		// Check default editor
-		if (version_compare($GLOBALS['wp_version'], '5.0-beta', '>=')) {
+		global $wp_version;
+		if (version_compare($wp_version, '5.0-beta', '>=')) {
 			$this->byDefault = true;
 		}
 	}
@@ -47,6 +48,24 @@ class Detector extends Helpers\Singleton {
 	 */
 	public function detected() {
 		return $this->byPlugin || $this->byDefault;
+	}
+
+
+
+	/**
+	 * Return plugin mode
+	 */
+	public function byPlugin() {
+		return $this->byPlugin;
+	}
+
+
+
+	/**
+	 * Return default editor mode
+	 */
+	public function byDefault() {
+		return $this->byDefault;
 	}
 
 

@@ -30,7 +30,7 @@ class Factory extends Helpers\Factory {
 	 * Create Disabler object
 	 */
 	protected function createDisabler() {
-		return Gutenberg\Disabler::instance($this->plugin);
+		return new Gutenberg\Disabler($this->plugin->factory->detector);
 	}
 
 
