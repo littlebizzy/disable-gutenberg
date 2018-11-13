@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Disable Gutenberg LittleBizzy
+Plugin Name: Disable Gutenberg
 Plugin URI: https://www.littlebizzy.com/plugins/disable-gutenberg
 Description: Completely disables the Gutenberg block editor and enables the classic WordPress post editor (TinyMCE aka WYSIWYG) for lighter coding and simplicity.
 Version: 1.0.0
