@@ -23,6 +23,7 @@ class Disabler {
 		['action', 'admin_notices', 				'gutenberg_build_files_notice'],
 		['action', 'admin_notices', 				'gutenberg_wordpress_version_notice'],
 		['action', 'admin_init', 					'gutenberg_redirect_demo'],
+		['action', 'admin_init', 					'gutenberg_add_edit_link_filters'],
 		['filter', 'replace_editor', 				'gutenberg_init'],
 
 		// lib/client-assets.php
