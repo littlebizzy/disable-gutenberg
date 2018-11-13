@@ -24,7 +24,10 @@ class Disabler {
 		['action', 'admin_notices', 				'gutenberg_wordpress_version_notice'],
 		['action', 'admin_init', 					'gutenberg_redirect_demo'],
 		['action', 'admin_init', 					'gutenberg_add_edit_link_filters'],
+		['action', 'admin_print_scripts-edit.php', 	'gutenberg_replace_default_add_new_button'],
 		['filter', 'replace_editor', 				'gutenberg_init'],
+		['filter', 'body_class', 					'gutenberg_add_responsive_body_class'],
+		['filter', 'admin_url', 					'gutenberg_modify_add_new_button_url'],
 
 		// lib/client-assets.php
 		['action', 'wp_enqueue_scripts', 			'gutenberg_register_scripts_and_styles', 5],
@@ -34,6 +37,7 @@ class Disabler {
 
 		// lib/compat.php
 		['filter', 'wp_refresh_nonces', 			'gutenberg_add_rest_nonce_to_heartbeat_response_headers'],
+		['action', 'admin_enqueue_scripts', 		'gutenberg_check_if_classic_needs_warning_about_blocks'],
 
 		// lib/rest-api.php
 		['action', 'rest_api_init', 				'gutenberg_register_rest_routes'],
@@ -50,6 +54,16 @@ class Disabler {
 		['action', 'edit_form_advanced', 			'gutenberg_intercept_meta_box_render'],
 		['filter', 'redirect_post_location', 		'gutenberg_meta_box_save_redirect'],
 		['filter', 'filter_gutenberg_meta_boxes', 	'gutenberg_filter_meta_boxes'],
+
+		// lib/register.php
+		['action', 'edit_form_top', 				'gutenberg_remember_classic_editor_when_saving_posts'],
+		['filter', 'redirect_post_location', 		'gutenberg_redirect_to_classic_editor_when_saving_posts'],
+		['filter', 'get_edit_post_link', 			'gutenberg_revisions_link_to_editor'],
+		['filter', 'wp_prepare_revision_for_js', 	'gutenberg_revisions_restore'],
+		['filter', 'display_post_states', 			'gutenberg_add_gutenberg_post_state'],
+
+		// lib/plugin-compat.php
+		['filter', 'rest_pre_insert_post', 			'gutenberg_remove_wpcom_markdown_support'],
 	];
 
 
