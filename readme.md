@@ -9,6 +9,9 @@ Completely disables the Gutenberg block editor and enables the classic WordPress
 
     /* Plugin Meta */
     define('DISABLE_NAG_NOTICES', true);
+    
+    /* Disable Gutenberg Functions */
+    define('DISABLE_GUTENBERG', 'true');
 
 ### Compatibility
 
