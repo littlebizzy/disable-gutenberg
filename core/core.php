@@ -27,7 +27,7 @@ final class Core extends Helpers\Singleton {
 		// Remove the "Try Gutenberg" dashboard widget
 		remove_action('try_gutenberg_panel', 'wp_try_gutenberg_panel');
 
-		// Plugin loaded hook
+		// Plugins loaded hook
 		add_action('plugins_loaded', [$this, 'onPluginsLoaded']);
 	}
 
