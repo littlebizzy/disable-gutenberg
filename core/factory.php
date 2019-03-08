@@ -35,4 +35,13 @@ class Factory extends Helpers\Factory {
 
 
 
+	/**
+	 * Create Styles object
+	 */
+	protected function createStyles() {
+		return new Gutenberg\Styles;
+	}
+
+
+
 }

@@ -24,25 +24,51 @@ final class Core extends Helpers\Singleton {
 		// Factory object
 		$this->plugin->factory = new Factory($this->plugin);
 
-		// Remove the "Try Gutenberg" dashboard widget
-		remove_action('try_gutenberg_panel', 'wp_try_gutenberg_panel');
+		// WP init hook
+		add_action('init', [$this, 'onInit']);
 
-		// Plugins loaded hook
-		add_action('plugins_loaded', [$this, 'onPluginsLoaded']);
+		// Print styles hook
+		add_action('wp_print_styles', [$this, 'styles'], PHP_INT_MAX);
 	}
 
 
 
 	/**
-	 * All plugins loaded hook
+	 * Handle WP init hook
 	 */
-	public function onPluginsLoaded() {
+	public function onInit() {
+
+		// Check disabled by constant
+		if (!$this->plugin->enabled('DISABLE_GUTENBERG')) {
+			return;
+		}
+
+		// Remove the "Try Gutenberg" dashboard widget
+		remove_action('try_gutenberg_panel', 'wp_try_gutenberg_panel');
 
 		// Check Gutenberg as a plugin or default editor
 		if ($this->plugin->factory->detector->detected()) {
 
 			// Disable actions and hooks
 			$this->plugin->factory->disabler();
+		}
+	}
+
+
+
+	/**
+	 * Handle the print styles hook
+	 */
+	public function styles() {
+
+		// Check disabled by constant
+		if (!$this->plugin->enabled('DISABLE_GUTENBERG')) {
+			return;
+		}
+
+		// Check context
+		if ($this->plugin->context()->front()) {
+			$this->plugin->factory->styles();
 		}
 	}
 
