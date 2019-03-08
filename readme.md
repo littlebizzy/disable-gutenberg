@@ -2,8 +2,8 @@
 
 Completely disables the Gutenberg block editor and enables the classic WordPress post editor (TinyMCE aka WYSIWYG) for lighter coding and simplicity.
 
-* [Plugin Homepage (LittleBizzy.com)](https://www.littlebizzy.com/plugins/disable-gutenberg)
-* [Free Facebook Group](https://www.facebook.com/groups/littlebizzy/)
+* [Plugin Homepage](https://www.littlebizzy.com/plugins/disable-gutenberg)
+* [**Become A LittleBizzy.com Member Today!**](https://www.littlebizzy.com/members)
 
 ### Defined Constants
 
