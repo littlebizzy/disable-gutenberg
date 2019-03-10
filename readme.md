@@ -8,7 +8,8 @@ Completely disables the Gutenberg block editor and enables the classic WordPress
 ### Defined Constants
 
     /* Plugin Meta */
-    define('DISABLE_NAG_NOTICES', true); // default = false
+    define('AUTOMATIC_UPDATE_PLUGINS', false); // default = false
+    define('DISABLE_NAG_NOTICES', true); // default = true
     
     /* Disable Gutenberg Functions */
     define('DISABLE_GUTENBERG', true); // default = false
