@@ -3,6 +3,7 @@
 Completely disables the Gutenberg block editor and enables the classic WordPress post editor (TinyMCE aka WYSIWYG) for lighter coding and simplicity.
 
 * [Plugin Homepage](https://www.littlebizzy.com/plugins/disable-gutenberg)
+* [Download Latest Version (ZIP)](https://github.com/littlebizzy/disable-gutenberg/archive/1.1.0.zip)
 * [**Become A LittleBizzy.com Member Today!**](https://www.littlebizzy.com/members)
 
 ### Defined Constants
@@ -12,7 +13,7 @@ Completely disables the Gutenberg block editor and enables the classic WordPress
     define('DISABLE_NAG_NOTICES', true); // default = true
     
     /* Disable Gutenberg Functions */
-    define('DISABLE_GUTENBERG', true); // default = false
+    define('DISABLE_GUTENBERG', true); // default = true
 
 ### Compatibility
 
