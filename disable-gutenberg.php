@@ -42,6 +42,12 @@ add_action( 'admin_enqueue_scripts', function() {
     wp_dequeue_script( 'wp-editor' );  // Remove Gutenberg block editor scripts.
 }, 100 );
 
+// Prevent Gutenberg block editor scripts from loading on post-editing pages.
+add_action( 'enqueue_block_editor_assets', function() {
+    wp_dequeue_script( 'wp-block-editor' );  // Dequeue block editor scripts.
+    wp_dequeue_style( 'wp-block-editor' );   // Dequeue block editor styles.
+}, 100 );
+
 // Remove any Gutenberg block-related dashboard widgets and admin menu items.
 add_action( 'wp_dashboard_setup', function() {
     remove_meta_box( 'dashboard_primary', 'dashboard', 'side' );  // Gutenberg news widget.
@@ -127,5 +133,29 @@ add_action( 'wp_site_health_scheduled_check', function() {
 
 // Force classic editor for all user roles and post types.
 add_filter( 'use_classic_editor_for_post', '__return_true', 100 );
+
+// Prevent block-based themes from enabling block editor functionality.
+add_action( 'after_setup_theme', function() {
+    remove_theme_support( 'block-editor' );
+    remove_theme_support( 'block-template-parts' );  // For FSE (Full Site Editing) templates.
+}, 10 );
+
+// Disable block editor filters/actions in REST API requests.
+add_action( 'rest_api_init', function() {
+    remove_action( 'rest_api_init', 'gutenberg_register_rest_routes' );  // Remove Gutenberg REST routes.
+    remove_filter( 'rest_preload_paths', 'gutenberg_preload_paths' );    // Prevent block preloading.
+}, 10 );
+
+// Disable Gutenberg's theme.json support.
+add_filter( 'should_load_separate_core_block_assets', '__return_false' );
+
+// Disable Full Site Editing (FSE) features.
+add_action( 'after_setup_theme', function() {
+    remove_theme_support( 'block-templates' );  // Disable FSE template support.
+});
+
+// Disable block editor shortcodes.
+remove_shortcode( 'block' );
+remove_shortcode( 'wp-block' );
 
 // Ref: ChatGPT
