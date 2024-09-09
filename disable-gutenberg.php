@@ -158,4 +158,36 @@ add_action( 'after_setup_theme', function() {
 remove_shortcode( 'block' );
 remove_shortcode( 'wp-block' );
 
+// Remove block categories.
+add_filter( 'block_categories_all', function( $categories ) {
+    return [];  // Return an empty array to remove all block categories.
+}, 10, 1 );
+
+// Disable block editor settings in Classic Widgets screen.
+add_action( 'admin_enqueue_scripts', function() {
+    if ( is_admin() && isset( $_GET['page'] ) && 'widgets.php' === $_GET['page'] ) {
+        wp_dequeue_script( 'wp-editor' );  // Dequeue block editor scripts on the widgets screen.
+    }
+}, 100 );
+
+// Unregister all core blocks.
+add_action( 'init', function() {
+    foreach ( WP_Block_Type_Registry::get_instance()->get_all_registered() as $block_type => $block ) {
+        unregister_block_type( $block_type );  // Unregister all core blocks.
+    }
+}, 20 );
+
+// Prevent block editor assets from preloading in REST API requests.
+add_filter( 'rest_preload_paths', function( $preload_paths ) {
+    return array_filter( $preload_paths, function( $path ) {
+        return false === strpos( $path, '/wp/v2/block-editor' );
+    } );
+}, 10, 1 );
+
+// Disable the Global Styles interface.
+remove_action( 'admin_init', 'gutenberg_add_global_styles_panel' );
+
+// Disable Gutenberg for Customizer Selective Refresh.
+add_filter( 'customize_selective_refresh_block_editor', '__return_false' );
+
 // Ref: ChatGPT
