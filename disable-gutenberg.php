@@ -36,17 +36,41 @@ add_action( 'wp_enqueue_scripts', function() {
     wp_dequeue_style( 'wp-block-library' );         // WordPress core block styles.
     wp_dequeue_style( 'wp-block-library-theme' );   // WordPress core block theme styles.
     remove_action( 'wp_enqueue_scripts', 'wp_common_block_scripts_and_styles' ); // Block editor inline styles/scripts.
+    wp_dequeue_script( 'wp-blocks' );               // Blocks script.
+    wp_dequeue_script( 'wp-dom-ready' );            // DOM-ready script.
+    wp_dequeue_script( 'wp-edit-post' );            // Edit post script.
 }, 20 );
 
+// Conditionally disable WooCommerce block styles (if WooCommerce is installed).
+if ( class_exists( 'WooCommerce' ) ) {
+    add_action( 'wp_enqueue_scripts', function() {
+        wp_dequeue_style( 'wc-block-style' );  // WooCommerce block styles.
+    }, 100 );
+}
+
+// Ensure Gutenberg editor assets are dequeued in the admin.
 add_action( 'admin_enqueue_scripts', function() {
-    wp_dequeue_script( 'wp-editor' );  // Remove Gutenberg block editor scripts.
+    wp_dequeue_style( 'wp-block-library' );         // WordPress core block styles in admin.
+    wp_dequeue_script( 'wp-editor' );               // Remove Gutenberg block editor scripts.
 }, 100 );
 
 // Prevent Gutenberg block editor scripts from loading on post-editing pages.
 add_action( 'enqueue_block_editor_assets', function() {
-    wp_dequeue_script( 'wp-block-editor' );  // Dequeue block editor scripts.
-    wp_dequeue_style( 'wp-block-editor' );   // Dequeue block editor styles.
+    wp_dequeue_script( 'wp-block-editor' );         // Dequeue block editor scripts.
+    wp_dequeue_style( 'wp-block-editor' );          // Dequeue block editor styles.
 }, 100 );
+
+// Disable block editor settings in Classic Widgets screen.
+add_action( 'admin_enqueue_scripts', function() {
+    if ( is_admin() && isset( $_GET['page'] ) && 'widgets.php' === $_GET['page'] ) {
+        wp_dequeue_script( 'wp-editor' );  // Dequeue block editor scripts on the widgets screen.
+    }
+}, 100 );
+
+// Disable Gutenberg in the media library.
+add_action( 'wp_enqueue_media', function() {
+    wp_dequeue_script( 'wp-edit-post' );  // Ensure no Gutenberg in media modals.
+});
 
 // Remove any Gutenberg block-related dashboard widgets and admin menu items.
 add_action( 'wp_dashboard_setup', function() {
@@ -86,13 +110,6 @@ add_action( 'admin_init', function() {
     remove_action( 'admin_init', 'gutenberg_add_widgets_block_editor' ); // Prevent widgets block editor.
 }, 10 );
 
-// Conditionally disable WooCommerce block styles (if WooCommerce is installed).
-if ( class_exists( 'WooCommerce' ) ) {
-    add_action( 'wp_enqueue_scripts', function() {
-        wp_dequeue_style( 'wc-block-style' );  // WooCommerce block styles.
-    }, 100 );
-}
-
 // Disable block editor settings in REST API JSON responses.
 add_filter( 'block_editor_rest_api_post_dispatch', '__return_false' );
 
@@ -100,13 +117,6 @@ add_filter( 'block_editor_rest_api_post_dispatch', '__return_false' );
 add_action( 'customize_register', function() {
     remove_action( 'customize_controls_enqueue_scripts', 'wp_enqueue_block_editor_assets' );
 });
-
-// Safeguard to dequeue any lingering Gutenberg-related assets from plugins.
-add_action( 'wp_enqueue_scripts', function() {
-    wp_dequeue_script( 'wp-blocks' );    // Blocks script.
-    wp_dequeue_script( 'wp-dom-ready' ); // DOM-ready script.
-    wp_dequeue_script( 'wp-edit-post' ); // Edit post script.
-}, 100 );
 
 // Disable reusable blocks functionality.
 add_action( 'init', function() {
@@ -116,11 +126,6 @@ add_action( 'init', function() {
 // Disable Gutenberg-related metaboxes.
 add_action( 'add_meta_boxes', function() {
     remove_meta_box( 'block_editor_meta_box', null, 'normal' );  // Remove block editor metabox.
-});
-
-// Disable Gutenberg in the media library.
-add_action( 'wp_enqueue_media', function() {
-    wp_dequeue_script( 'wp-edit-post' );  // Ensure no Gutenberg in media modals.
 });
 
 // Disable legacy widgets block editor.
@@ -162,13 +167,6 @@ remove_shortcode( 'wp-block' );
 add_filter( 'block_categories_all', function( $categories ) {
     return [];  // Return an empty array to remove all block categories.
 }, 10, 1 );
-
-// Disable block editor settings in Classic Widgets screen.
-add_action( 'admin_enqueue_scripts', function() {
-    if ( is_admin() && isset( $_GET['page'] ) && 'widgets.php' === $_GET['page'] ) {
-        wp_dequeue_script( 'wp-editor' );  // Dequeue block editor scripts on the widgets screen.
-    }
-}, 100 );
 
 // Unregister all core blocks.
 add_action( 'init', function() {
