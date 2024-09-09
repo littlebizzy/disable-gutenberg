@@ -1,5 +1,7 @@
 # Disable Gutenberg
 
+Disables block editor entirely
+
 ## Changelog
 
 ### 1.1.0
@@ -16,4 +18,3 @@
 * tested with PHP 7.2
 * uses PHP namespaces
 * object-oriented codebase
-* 
