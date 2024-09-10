@@ -169,17 +169,11 @@ add_action( 'rest_api_init', function() {
     remove_filter( 'rest_preload_paths', 'gutenberg_preload_paths' );    // Prevent block preloading.
 }, 10 );
 
-// Disable Gutenberg's theme.json support.
-add_filter( 'should_load_separate_core_block_assets', '__return_false' );
-
-// Disable Full Site Editing (FSE) features.
-add_action( 'after_setup_theme', function() {
-    remove_theme_support( 'block-templates' );  // Disable FSE template support.
-});
-
 // Disable block editor shortcodes.
-remove_shortcode( 'block' );
-remove_shortcode( 'wp-block' );
+add_action( 'init', function() {
+    remove_shortcode( 'block' );
+    remove_shortcode( 'wp-block' );
+}, 20 );
 
 // Remove block categories.
 add_filter( 'block_categories_all', function( $categories ) {
