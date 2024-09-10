@@ -32,7 +32,8 @@ add_filter( 'use_block_editor_for_template', '__return_false', 100 );
 add_filter( 'use_block_editor_for_navigation', '__return_false', 100 );
 add_filter( 'use_widgets_block_editor', '__return_false', 100 );
 add_filter( 'gutenberg_use_widgets_block_editor', '__return_false', 100 );
-add_filter( 'rest_prepare_block_template', '__return_null', 100 );
+add_filter( 'should_load_separate_core_block_assets', '__return_false', 100 );
+add_filter( 'wp_use_themes', '__return_false', 100 ); // Disable block-related theme processing.
 
 // Dequeue Gutenberg-related scripts and styles from both frontend and admin.
 add_action( 'wp_enqueue_scripts', function() {
@@ -180,8 +181,10 @@ add_action( 'after_setup_theme', function() {
 
 // Disable block editor filters/actions in REST API requests.
 add_action( 'rest_api_init', function() {
+    add_filter( 'rest_prepare_block_template', '__return_null', 100 );
     remove_action( 'rest_api_init', 'gutenberg_register_rest_routes' );  // Remove Gutenberg REST routes.
     remove_filter( 'rest_preload_paths', 'gutenberg_preload_paths' );    // Prevent block preloading.
+    remove_filter( 'rest_prepare_block_template', 'gutenberg_rest_prepare_block_template' ); // Remove Gutenberg block template filter from REST API.
 }, 10 );
 
 // Disable block editor shortcodes.
