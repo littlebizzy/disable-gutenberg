@@ -25,11 +25,11 @@ add_filter( 'gu_override_dot_org', function ( $overrides ) {
 });
 
 // Disable Gutenberg editor globally for all post types, terms, and widgets.
-add_filter( 'use_block_editor_for_post', '__return_false', 10 );
-add_filter( 'use_block_editor_for_post_type', '__return_false', 10 );
-add_filter( 'gutenberg_use_widgets_block_editor', '__return_false', 10 );
-add_filter( 'use_widgets_block_editor', '__return_false', 10 );
-add_filter( 'use_block_editor_for_terms', '__return_false', 10 );
+add_filter( 'use_block_editor_for_post', '__return_false', 100 );
+add_filter( 'use_block_editor_for_post_type', '__return_false', 100 );
+add_filter( 'use_widgets_block_editor', '__return_false', 100 );
+add_filter( 'gutenberg_use_widgets_block_editor', '__return_false', 100 );
+add_filter( 'use_block_editor_for_terms', '__return_false', 100 );
 
 // Dequeue Gutenberg-related scripts and styles from both frontend and admin.
 add_action( 'wp_enqueue_scripts', function() {
@@ -114,10 +114,6 @@ add_filter( 'block_editor_settings_all', function( $settings ) {
     return $settings;
 }, 10, 2 );
 
-// Remove core block patterns and templates globally.
-remove_theme_support( 'core-block-patterns' );
-remove_theme_support( 'block-templates' );
-
 // Remove Gutenberg-specific nag notices or admin notices.
 add_action( 'admin_menu', function() {
     remove_action( 'try_gutenberg_panel', 'wp_try_gutenberg_panel' );  // Remove Gutenberg try-out notice.
@@ -155,10 +151,16 @@ add_action( 'wp_site_health_scheduled_check', function() {
     remove_action( 'wp_site_health_scheduled_check', 'wp_block_editor_health_check', 10 );
 });
 
-// Prevent block-based themes from enabling block editor functionality.
+// Prevent block-based themes from enabling block editor functionality and disable theme.json support.
 add_action( 'after_setup_theme', function() {
+    // Disable block editor functionality in block-based themes.
     remove_theme_support( 'block-editor' );
     remove_theme_support( 'block-template-parts' );  // For FSE (Full Site Editing) templates.
+    
+    // Disable Gutenberg's theme.json support and related features.
+    remove_theme_support( 'block-templates' );       // Disable Full Site Editing templates.
+    remove_theme_support( 'core-block-patterns' );   // Remove core block patterns.
+    remove_theme_support( 'wp-block-styles' );       // Disable block-specific styles.
 }, 10 );
 
 // Disable block editor filters/actions in REST API requests.
