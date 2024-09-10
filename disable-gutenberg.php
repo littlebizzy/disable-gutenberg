@@ -40,24 +40,40 @@ add_filter( 'should_load_theme_json', '__return_false', 100 );
 // Prevent block editor from adding styles to post content.
 remove_filter( 'the_content', 'do_blocks', 9 );
 
-// Dequeue Gutenberg-related scripts and styles from both frontend and admin.
+// Dequeue and deregister Gutenberg-related scripts and styles from both frontend and backend.
 add_action( 'wp_enqueue_scripts', function() {
+    // Dequeue Gutenberg-related styles and scripts on the frontend.
     wp_dequeue_style( 'wp-block-library' );         // WordPress core block styles.
     wp_dequeue_style( 'wp-block-library-theme' );   // WordPress core block theme styles.
+    wp_dequeue_style( 'wp-edit-blocks' );           // Block editor styles (if applicable on the frontend).
+    wp_dequeue_script( 'wp-block-editor' );         // Block editor script.
     wp_dequeue_script( 'wp-blocks' );               // Blocks script.
     wp_dequeue_script( 'wp-dom-ready' );            // DOM-ready script.
+
+    // Deregister Gutenberg-related scripts on the frontend.
+    wp_deregister_script( 'wp-block-editor' );      // Block editor script.
+    wp_deregister_script( 'wp-blocks' );            // Block-related script.
+    wp_deregister_script( 'wp-dom-ready' );         // DOM-ready script.
+
+    // Remove inline styles and scripts related to the block editor.
     remove_action( 'wp_enqueue_scripts', 'wp_common_block_scripts_and_styles' ); // Block editor inline styles/scripts.
     remove_action( 'wp_head', 'wp_enqueue_editor_block_assets', 9 );  // Remove inline block editor styles.
 }, 20 );
 
 add_action( 'admin_enqueue_scripts', function() {
+    // Dequeue Gutenberg-related styles and scripts on the backend.
     wp_dequeue_style( 'wp-block-library' );         // WordPress core block styles in admin.
-    wp_dequeue_style( 'wp-block-library-theme' );   // Block editor theme CSS in admin.
+    wp_dequeue_style( 'wp-block-library-theme' );   // WordPress core block theme styles in admin.
     wp_dequeue_style( 'wp-edit-blocks' );           // Block editor styles in admin.
-    wp_dequeue_script( 'wp-block-editor' );         // Dequeue block editor scripts.
-    wp_dequeue_script( 'wp-blocks' );               // Dequeue block script in admin.
-    wp_deregister_script( 'wp-block-editor' );      // Deregister block editor script.
-}, 100 );
+    wp_dequeue_script( 'wp-block-editor' );         // Block editor script.
+    wp_dequeue_script( 'wp-blocks' );               // Blocks script.
+    wp_dequeue_script( 'wp-dom-ready' );            // DOM-ready script.
+
+    // Deregister Gutenberg-related scripts in the admin area.
+    wp_deregister_script( 'wp-block-editor' );      // Block editor script.
+    wp_deregister_script( 'wp-blocks' );            // Block-related script.
+    wp_deregister_script( 'wp-dom-ready' );         // DOM-ready script.
+}, 20 );
 
 // Conditionally disable WooCommerce block styles and scripts (if WooCommerce is installed).
 if ( class_exists( 'WooCommerce' ) ) {
