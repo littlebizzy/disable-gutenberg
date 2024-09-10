@@ -101,7 +101,7 @@ add_filter( 'rest_endpoints', function( $endpoints ) {
     }
     
     return $endpoints;
-});
+}, 20 );
 
 // Disable Gutenberg block editor settings globally in the backend.
 add_filter( 'block_editor_settings_all', function( $settings ) {
@@ -112,7 +112,7 @@ add_filter( 'block_editor_settings_all', function( $settings ) {
     $settings['disableCustomLineHeight'] = true;   // Disable custom line heights.
     $settings['disableCustomUnits']      = true;   // Disable custom units.
     return $settings;
-}, 10, 2 );
+}, 20, 2 );
 
 // Remove Gutenberg-specific nag notices or admin notices.
 add_action( 'admin_menu', function() {
