@@ -27,11 +27,12 @@ add_filter('gu_override_dot_org', function ($overrides) {
 // Disable Gutenberg editor globally for all post types, terms, and widgets.
 add_filter( 'use_block_editor_for_post', '__return_false', 100 );
 add_filter( 'use_block_editor_for_post_type', '__return_false', 100 );
-add_filter( 'use_widgets_block_editor', '__return_false', 100 );
-add_filter( 'gutenberg_use_widgets_block_editor', '__return_false', 100 );
 add_filter( 'use_block_editor_for_terms', '__return_false', 100 );
 add_filter( 'use_block_editor_for_template', '__return_false', 100 );
 add_filter( 'use_block_editor_for_navigation', '__return_false', 100 );
+add_filter( 'use_widgets_block_editor', '__return_false', 100 );
+add_filter( 'gutenberg_use_widgets_block_editor', '__return_false', 100 );
+add_filter( 'rest_prepare_block_template', '__return_null', 100 );
 
 // Dequeue Gutenberg-related scripts and styles from both frontend and admin.
 add_action( 'wp_enqueue_scripts', function() {
@@ -60,8 +61,11 @@ if ( class_exists( 'WooCommerce' ) ) {
 // Ensure Gutenberg editor assets are dequeued in the admin but support Classic Editor.
 add_action( 'admin_enqueue_scripts', function() {
     wp_dequeue_style( 'wp-block-library' );         // WordPress core block styles in admin.
+    wp_dequeue_style( 'wp-block-library-theme' );   // Dequeue the block editor theme CSS.
     wp_dequeue_style( 'wp-edit-blocks' );           // Remove block editor styles.
     wp_dequeue_script( 'wp-block-editor' );         // Dequeue block editor scripts.
+     wp_dequeue_script( 'wp-blocks' );               // Dequeue block script.
+    
 }, 100 );
 
 // Prevent Gutenberg block editor scripts and styles from loading on post-editing pages.
