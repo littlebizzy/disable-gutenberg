@@ -56,6 +56,7 @@ add_action( 'admin_enqueue_scripts', function() {
     wp_dequeue_style( 'wp-edit-blocks' );           // Block editor styles in admin.
     wp_dequeue_script( 'wp-block-editor' );         // Dequeue block editor scripts.
     wp_dequeue_script( 'wp-blocks' );               // Dequeue block script in admin.
+    wp_deregister_script( 'wp-block-editor' );      // Deregister block editor script.
 }, 100 );
 
 // Conditionally disable WooCommerce block styles and scripts (if WooCommerce is installed).
@@ -186,14 +187,15 @@ add_action( 'after_setup_theme', function() {
 add_action( 'rest_api_init', function() {
     add_filter( 'rest_prepare_block_template', '__return_null', 100 );  // Remove block template responses.
     add_filter( 'rest_preload_paths', '__return_empty_array', 100 );    // Prevent Gutenberg preloading.
-}, 10 );
+    remove_action( 'rest_api_init', 'gutenberg_register_rest_routes' );  // Remove Gutenberg REST routes.
 
-// Remove Gutenberg REST routes earlier.
-add_action( 'init', function() {
-    if ( has_action( 'rest_api_init', 'gutenberg_register_rest_routes' ) ) {
-        remove_action( 'rest_api_init', 'gutenberg_register_rest_routes' );  // Remove Gutenberg REST routes.
-    }
-}, 20 );  // Higher priority to ensure it runs after Gutenberg adds the action.
+    // Add your new filter for REST API link curies.
+    add_filter( 'rest_response_link_curies', function( $curies ) {
+        return array_filter( $curies, function( $curie ) {
+            return strpos( $curie['name'], 'wp-block' ) === false;
+        } );
+    }, 20 );
+}, 20 );
 
 // Disable block editor shortcodes.
 add_action( 'init', function() {
