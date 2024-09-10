@@ -27,9 +27,9 @@ add_filter( 'gu_override_dot_org', function ( $overrides ) {
 // Disable Gutenberg editor globally for all post types, terms, and widgets.
 add_filter( 'use_block_editor_for_post', '__return_false', 10 );
 add_filter( 'use_block_editor_for_post_type', '__return_false', 10 );
-add_filter( 'gutenberg_use_widgets_block_editor', '__return_false' );
-add_filter( 'use_widgets_block_editor', '__return_false' );
-add_filter( 'use_block_editor_for_terms', '__return_false' );
+add_filter( 'gutenberg_use_widgets_block_editor', '__return_false', 10 );
+add_filter( 'use_widgets_block_editor', '__return_false', 10 );
+add_filter( 'use_block_editor_for_terms', '__return_false', 10 );
 
 // Dequeue Gutenberg-related scripts and styles from both frontend and admin.
 add_action( 'wp_enqueue_scripts', function() {
@@ -41,10 +41,17 @@ add_action( 'wp_enqueue_scripts', function() {
     wp_dequeue_script( 'wp-edit-post' );            // Edit post script.
 }, 20 );
 
-// Conditionally disable WooCommerce block styles (if WooCommerce is installed).
+// Conditionally disable WooCommerce block styles and scripts (if WooCommerce is installed).
 if ( class_exists( 'WooCommerce' ) ) {
     add_action( 'wp_enqueue_scripts', function() {
-        wp_dequeue_style( 'wc-block-style' );  // WooCommerce block styles.
+        wp_dequeue_style( 'wc-block-style' );    // WooCommerce block styles (frontend).
+        wp_dequeue_script( 'wc-blocks' );        // WooCommerce block scripts (frontend).
+    }, 100 );
+
+    // Disable WooCommerce block editor assets in the admin area.
+    add_action( 'admin_enqueue_scripts', function() {
+        wp_dequeue_style( 'wc-block-editor' );   // WooCommerce block editor styles (backend).
+        wp_dequeue_script( 'wc-blocks-editor' ); // WooCommerce block editor scripts (backend).
     }, 100 );
 }
 
