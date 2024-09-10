@@ -171,11 +171,6 @@ add_action( 'init', function() {
     unregister_post_type( 'wp_block' );  // Reusable blocks post type.
 }, 10 );
 
-// Disable Gutenberg-related metaboxes.
-add_action( 'add_meta_boxes', function() {
-    remove_meta_box( 'block_editor_meta_box', null, 'normal' );  // Remove block editor metabox.
-}, 10 );
-
 // Disable the block editor for widgets and enable the Classic Widgets interface.
 add_filter( 'use_widgets_block_editor', '__return_false', 100 );
 
