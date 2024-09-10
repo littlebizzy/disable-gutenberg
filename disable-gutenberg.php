@@ -147,16 +147,13 @@ add_action( 'add_meta_boxes', function() {
     remove_meta_box( 'block_editor_meta_box', null, 'normal' );  // Remove block editor metabox.
 });
 
-// Disable legacy widgets block editor.
+// Disable the block editor for widgets and enable the Classic Widgets interface.
 add_filter( 'use_widgets_block_editor', '__return_false', 100 );
 
 // Remove Gutenberg-related Site Health checks.
 add_action( 'wp_site_health_scheduled_check', function() {
     remove_action( 'wp_site_health_scheduled_check', 'wp_block_editor_health_check', 10 );
 });
-
-// Force classic editor for all user roles and post types.
-add_filter( 'use_classic_editor_for_post', '__return_true', 100 );
 
 // Prevent block-based themes from enabling block editor functionality.
 add_action( 'after_setup_theme', function() {
