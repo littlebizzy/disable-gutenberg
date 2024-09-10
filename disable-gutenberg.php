@@ -18,11 +18,11 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// Disable WordPress.org updates for this plugin.
-add_filter( 'gu_override_dot_org', function ( $overrides ) {
+// Disable WordPress.org updates for this plugin
+add_filter('gu_override_dot_org', function ($overrides) {
     $overrides[] = 'disable-gutenberg/disable-gutenberg.php';
     return $overrides;
-}, 10 );
+});
 
 // Disable Gutenberg editor globally for all post types, terms, and widgets.
 add_filter( 'use_block_editor_for_post', '__return_false', 100 );
