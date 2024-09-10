@@ -188,10 +188,6 @@ add_action( 'init', function() {
 }, 20 );
 
 // Prevent block editor assets from preloading in REST API requests.
-add_filter( 'rest_preload_paths', function( $preload_pathsHere's the completion of the PHP file:
-
-```php
-// Prevent block editor assets from preloading in REST API requests.
 add_filter( 'rest_preload_paths', function( $preload_paths ) {
     return array_filter( $preload_paths, function( $path ) {
         return false === strpos( $path, '/wp/v2/block-editor' );
