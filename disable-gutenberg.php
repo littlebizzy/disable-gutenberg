@@ -181,11 +181,14 @@ add_action( 'after_setup_theme', function() {
 
 // Disable block editor filters/actions in REST API requests.
 add_action( 'rest_api_init', function() {
-    add_filter( 'rest_prepare_block_template', '__return_null', 100 );
-    remove_action( 'rest_api_init', 'gutenberg_register_rest_routes' );  // Remove Gutenberg REST routes.
-    remove_filter( 'rest_preload_paths', 'gutenberg_preload_paths' );    // Prevent block preloading.
-    remove_filter( 'rest_prepare_block_template', 'gutenberg_rest_prepare_block_template' ); // Remove Gutenberg block template filter from REST API.
+    add_filter( 'rest_prepare_block_template', '__return_null', 100 );  // Remove block template responses.
+    add_filter( 'rest_preload_paths', '__return_empty_array', 100 );    // Prevent Gutenberg preloading.
 }, 10 );
+
+// Remove Gutenberg REST routes earlier.
+add_action( 'init', function() {
+    remove_action( 'rest_api_init', 'gutenberg_register_rest_routes' );  // Remove Gutenberg REST routes.
+}, 20 );  // Higher priority to ensure it runs after Gutenberg adds the action.
 
 // Disable block editor shortcodes.
 add_action( 'init', function() {
