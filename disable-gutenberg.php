@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 add_filter( 'gu_override_dot_org', function ( $overrides ) {
     $overrides[] = 'disable-gutenberg/disable-gutenberg.php';
     return $overrides;
-});
+}, 10 );
 
 // Disable Gutenberg editor globally for all post types, terms, and widgets.
 add_filter( 'use_block_editor_for_post', '__return_false', 100 );
@@ -117,7 +117,7 @@ add_filter( 'block_editor_settings_all', function( $settings ) {
 // Remove Gutenberg-specific nag notices or admin notices.
 add_action( 'admin_menu', function() {
     remove_action( 'try_gutenberg_panel', 'wp_try_gutenberg_panel' );  // Remove Gutenberg try-out notice.
-});
+}, 10 );
 
 // Disable Gutenberg-related actions during admin initialization.
 add_action( 'admin_init', function() {
@@ -131,17 +131,17 @@ add_filter( 'block_editor_rest_api_post_dispatch', '__return_false', 10 );
 // Disable Gutenberg in the Customizer.
 add_action( 'customize_register', function() {
     remove_action( 'customize_controls_enqueue_scripts', 'wp_enqueue_block_editor_assets' );
-});
+}, 10 );
 
 // Disable reusable blocks functionality.
 add_action( 'init', function() {
     unregister_post_type( 'wp_block' );  // Reusable blocks post type.
-});
+}, 10 );
 
 // Disable Gutenberg-related metaboxes.
 add_action( 'add_meta_boxes', function() {
     remove_meta_box( 'block_editor_meta_box', null, 'normal' );  // Remove block editor metabox.
-});
+}, 10 );
 
 // Disable the block editor for widgets and enable the Classic Widgets interface.
 add_filter( 'use_widgets_block_editor', '__return_false', 100 );
@@ -149,7 +149,7 @@ add_filter( 'use_widgets_block_editor', '__return_false', 100 );
 // Remove Gutenberg-related Site Health checks.
 add_action( 'wp_site_health_scheduled_check', function() {
     remove_action( 'wp_site_health_scheduled_check', 'wp_block_editor_health_check', 10 );
-});
+}, 10 );
 
 // Prevent block-based themes from enabling block editor functionality and disable theme.json support.
 add_action( 'after_setup_theme', function() {
@@ -188,6 +188,10 @@ add_action( 'init', function() {
 }, 20 );
 
 // Prevent block editor assets from preloading in REST API requests.
+add_filter( 'rest_preload_paths', function( $preload_pathsHere's the completion of the PHP file:
+
+```php
+// Prevent block editor assets from preloading in REST API requests.
 add_filter( 'rest_preload_paths', function( $preload_paths ) {
     return array_filter( $preload_paths, function( $path ) {
         return false === strpos( $path, '/wp/v2/block-editor' );
@@ -200,6 +204,6 @@ add_action( 'admin_init', function() {
 }, 20 );
 
 // Disable Gutenberg for Customizer Selective Refresh.
-add_filter( 'customize_selective_refresh_block_editor', '__return_false' );
+add_filter( 'customize_selective_refresh_block_editor', '__return_false', 10 );
 
 // Ref: ChatGPT
