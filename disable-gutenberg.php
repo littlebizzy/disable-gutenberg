@@ -34,6 +34,8 @@ add_filter( 'use_widgets_block_editor', '__return_false', 100 );
 add_filter( 'gutenberg_use_widgets_block_editor', '__return_false', 100 );
 add_filter( 'should_load_separate_core_block_assets', '__return_false', 100 );
 add_filter( 'wp_use_themes', '__return_false', 100 ); // Disable block-related theme processing.
+add_filter( 'block_editor_rest_api_preload_paths', '__return_empty_array', 100 );
+add_filter( 'should_load_theme_json', '__return_false', 100 );
 
 // Prevent block editor from adding styles to post content.
 remove_filter( 'the_content', 'do_blocks', 9 );
