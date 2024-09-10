@@ -30,12 +30,15 @@ add_filter( 'use_block_editor_for_post_type', '__return_false', 100 );
 add_filter( 'use_widgets_block_editor', '__return_false', 100 );
 add_filter( 'gutenberg_use_widgets_block_editor', '__return_false', 100 );
 add_filter( 'use_block_editor_for_terms', '__return_false', 100 );
+add_filter( 'use_block_editor_for_template', '__return_false', 100 );
+add_filter( 'use_block_editor_for_navigation', '__return_false', 100 );
 
 // Dequeue Gutenberg-related scripts and styles from both frontend and admin.
 add_action( 'wp_enqueue_scripts', function() {
     wp_dequeue_style( 'wp-block-library' );         // WordPress core block styles.
     wp_dequeue_style( 'wp-block-library-theme' );   // WordPress core block theme styles.
     remove_action( 'wp_enqueue_scripts', 'wp_common_block_scripts_and_styles' ); // Block editor inline styles/scripts.
+    remove_action( 'wp_head', 'wp_enqueue_editor_block_assets', 9 );  // Remove inline block editor styles.
     wp_dequeue_script( 'wp-blocks' );               // Blocks script.
     wp_dequeue_script( 'wp-dom-ready' );            // DOM-ready script.
 }, 20 );
@@ -88,11 +91,12 @@ add_filter( 'rest_endpoints', function( $endpoints ) {
     if ( isset( $endpoints['/wp/v2/block-renderer'] ) ) {
         unset( $endpoints['/wp/v2/block-renderer'] );
     }
-    
     if ( isset( $endpoints['/wp/v2/wp_block'] ) ) {
         unset( $endpoints['/wp/v2/wp_block'] );
     }
-    
+    if ( isset( $endpoints['/wp/v2/global-styles'] ) ) {
+        unset( $endpoints['/wp/v2/global-styles'] );
+    }
     // Optionally remove other Gutenberg-related endpoints.
     if ( isset( $endpoints['/wp/v2/block-directory'] ) ) {
         unset( $endpoints['/wp/v2/block-directory'] );
