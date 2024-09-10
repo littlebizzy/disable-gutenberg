@@ -89,6 +89,10 @@ add_filter( 'rest_endpoints', function( $endpoints ) {
         unset( $endpoints['/wp/v2/block-renderer'] );
     }
     
+    if ( isset( $endpoints['/wp/v2/wp_block'] ) ) {
+        unset( $endpoints['/wp/v2/wp_block'] );
+    }
+    
     // Optionally remove other Gutenberg-related endpoints.
     if ( isset( $endpoints['/wp/v2/block-directory'] ) ) {
         unset( $endpoints['/wp/v2/block-directory'] );
@@ -153,14 +157,17 @@ add_action( 'wp_site_health_scheduled_check', function() {
 
 // Prevent block-based themes from enabling block editor functionality and disable theme.json support.
 add_action( 'after_setup_theme', function() {
-    // Disable block editor functionality in block-based themes.
     remove_theme_support( 'block-editor' );
     remove_theme_support( 'block-template-parts' );  // For FSE (Full Site Editing) templates.
-    
-    // Disable Gutenberg's theme.json support and related features.
     remove_theme_support( 'block-templates' );       // Disable Full Site Editing templates.
     remove_theme_support( 'core-block-patterns' );   // Remove core block patterns.
     remove_theme_support( 'wp-block-styles' );       // Disable block-specific styles.
+    remove_theme_support( 'widgets-block-editor' );
+    remove_theme_support( 'block-align-wide' );     // Remove wide and full alignment options.
+    remove_theme_support( 'editor-styles' );        // Disable editor styles in block editor.
+    remove_theme_support( 'responsive-embeds' );    // Disable responsive embeds in block editor.
+    remove_theme_support( 'editor-font-sizes' );    // Disable font size options in block editor.
+    remove_theme_support( 'editor-color-palette' ); // Disable color options in block editor.
 }, 10 );
 
 // Disable block editor filters/actions in REST API requests.
