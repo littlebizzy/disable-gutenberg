@@ -35,6 +35,9 @@ add_filter( 'gutenberg_use_widgets_block_editor', '__return_false', 100 );
 add_filter( 'should_load_separate_core_block_assets', '__return_false', 100 );
 add_filter( 'wp_use_themes', '__return_false', 100 ); // Disable block-related theme processing.
 
+// Prevent block editor from adding styles to post content.
+remove_filter( 'the_content', 'do_blocks', 9 );
+
 // Dequeue Gutenberg-related scripts and styles from both frontend and admin.
 add_action( 'wp_enqueue_scripts', function() {
     wp_dequeue_style( 'wp-block-library' );         // WordPress core block styles.
@@ -215,9 +218,10 @@ add_filter( 'rest_preload_paths', function( $preload_paths ) {
     } );
 }, 20, 1 );
 
-// Disable the Global Styles interface.
+// Disable Gutenberg-specific admin notices and Global Styles interface.
 add_action( 'admin_init', function() {
-    remove_action( 'admin_init', 'gutenberg_add_global_styles_panel' );  // Remove Global Styles panel.
+    remove_action( 'admin_notices', 'gutenberg_wordpress_version_notice' );  // Remove Gutenberg version notice.
+    remove_action( 'admin_init', 'gutenberg_add_global_styles_panel' );      // Remove Global Styles panel.
 }, 20 );
 
 // Disable Gutenberg for Customizer Selective Refresh.
