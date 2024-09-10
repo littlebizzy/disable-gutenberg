@@ -175,10 +175,10 @@ add_action( 'init', function() {
     remove_shortcode( 'wp-block' );
 }, 20 );
 
-// Remove block categories.
+// Remove all block categories.
 add_filter( 'block_categories_all', function( $categories ) {
     return [];  // Return an empty array to remove all block categories.
-}, 10, 1 );
+}, 20, 1 );
 
 // Unregister all core blocks.
 add_action( 'init', function() {
@@ -192,10 +192,12 @@ add_filter( 'rest_preload_paths', function( $preload_paths ) {
     return array_filter( $preload_paths, function( $path ) {
         return false === strpos( $path, '/wp/v2/block-editor' );
     } );
-}, 10, 1 );
+}, 20, 1 );
 
 // Disable the Global Styles interface.
-remove_action( 'admin_init', 'gutenberg_add_global_styles_panel' );
+add_action( 'admin_init', function() {
+    remove_action( 'admin_init', 'gutenberg_add_global_styles_panel' );  // Remove Global Styles panel.
+}, 20 );
 
 // Disable Gutenberg for Customizer Selective Refresh.
 add_filter( 'customize_selective_refresh_block_editor', '__return_false' );
