@@ -39,11 +39,19 @@ add_filter( 'wp_use_themes', '__return_false', 100 ); // Disable block-related t
 add_action( 'wp_enqueue_scripts', function() {
     wp_dequeue_style( 'wp-block-library' );         // WordPress core block styles.
     wp_dequeue_style( 'wp-block-library-theme' );   // WordPress core block theme styles.
-    remove_action( 'wp_enqueue_scripts', 'wp_common_block_scripts_and_styles' ); // Block editor inline styles/scripts.
-    remove_action( 'wp_head', 'wp_enqueue_editor_block_assets', 9 );  // Remove inline block editor styles.
     wp_dequeue_script( 'wp-blocks' );               // Blocks script.
     wp_dequeue_script( 'wp-dom-ready' );            // DOM-ready script.
+    remove_action( 'wp_enqueue_scripts', 'wp_common_block_scripts_and_styles' ); // Block editor inline styles/scripts.
+    remove_action( 'wp_head', 'wp_enqueue_editor_block_assets', 9 );  // Remove inline block editor styles.
 }, 20 );
+
+add_action( 'admin_enqueue_scripts', function() {
+    wp_dequeue_style( 'wp-block-library' );         // WordPress core block styles in admin.
+    wp_dequeue_style( 'wp-block-library-theme' );   // Block editor theme CSS in admin.
+    wp_dequeue_style( 'wp-edit-blocks' );           // Block editor styles in admin.
+    wp_dequeue_script( 'wp-block-editor' );         // Dequeue block editor scripts.
+    wp_dequeue_script( 'wp-blocks' );               // Dequeue block script in admin.
+}, 100 );
 
 // Conditionally disable WooCommerce block styles and scripts (if WooCommerce is installed).
 if ( class_exists( 'WooCommerce' ) ) {
@@ -58,16 +66,6 @@ if ( class_exists( 'WooCommerce' ) ) {
         wp_dequeue_script( 'wc-blocks-editor' ); // WooCommerce block editor scripts (backend).
     }, 100 );
 }
-
-// Ensure Gutenberg editor assets are dequeued in the admin but support Classic Editor.
-add_action( 'admin_enqueue_scripts', function() {
-    wp_dequeue_style( 'wp-block-library' );         // WordPress core block styles in admin.
-    wp_dequeue_style( 'wp-block-library-theme' );   // Dequeue the block editor theme CSS.
-    wp_dequeue_style( 'wp-edit-blocks' );           // Remove block editor styles.
-    wp_dequeue_script( 'wp-block-editor' );         // Dequeue block editor scripts.
-     wp_dequeue_script( 'wp-blocks' );               // Dequeue block script.
-    
-}, 100 );
 
 // Prevent Gutenberg block editor scripts and styles from loading on post-editing pages.
 add_action( 'enqueue_block_editor_assets', function() {
@@ -187,7 +185,9 @@ add_action( 'rest_api_init', function() {
 
 // Remove Gutenberg REST routes earlier.
 add_action( 'init', function() {
-    remove_action( 'rest_api_init', 'gutenberg_register_rest_routes' );  // Remove Gutenberg REST routes.
+    if ( has_action( 'rest_api_init', 'gutenberg_register_rest_routes' ) ) {
+        remove_action( 'rest_api_init', 'gutenberg_register_rest_routes' );  // Remove Gutenberg REST routes.
+    }
 }, 20 );  // Higher priority to ensure it runs after Gutenberg adds the action.
 
 // Disable block editor shortcodes.
