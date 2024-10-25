@@ -3,7 +3,7 @@
 Plugin Name: Disable Gutenberg
 Plugin URI: https://www.littlebizzy.com/plugins/disable-gutenberg
 Description: Disables block editor entirely
-Version: 2.0.1
+Version: 2.0.0
 Requires PHP: 7.0
 Author: LittleBizzy
 Author URI: https://www.littlebizzy.com
