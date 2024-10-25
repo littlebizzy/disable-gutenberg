@@ -3,26 +3,26 @@
 Plugin Name: Disable Gutenberg
 Plugin URI: https://www.littlebizzy.com/plugins/disable-gutenberg
 Description: Disables block editor entirely
-Version: 2.0.0
+Version: 2.0.1
+Requires PHP: 7.0
 Author: LittleBizzy
 Author URI: https://www.littlebizzy.com
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 GitHub Plugin URI: littlebizzy/disable-gutenberg
 Primary Branch: master
-Prefix: DSBGTB
 */
 
-// Exit if accessed directly.
+// prevent direct access
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// Disable WordPress.org updates for this plugin
-add_filter('gu_override_dot_org', function ($overrides) {
+// disable wordpress.org updates for this plugin
+add_filter( 'gu_override_dot_org', function( $overrides ) {
     $overrides[] = 'disable-gutenberg/disable-gutenberg.php';
     return $overrides;
-});
+}, 999 );
 
 // Disable Gutenberg editor globally for all post types, terms, and widgets.
 add_filter( 'use_block_editor_for_post', '__return_false', 100 );
